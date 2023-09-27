@@ -1,0 +1,73 @@
+<div class="wrapper">
+  <div class="header p-2">
+    <!-- <div class="header-title"> -->
+      <!-- {{ title }} -->
+      <!-- <span class="material-icons" (click)="retry()"> -->
+        <!-- restart_alt -->
+        <!-- </span> -->
+    <!-- </div> -->
+    <div class="header-leaderboard">
+      
+      <div class="float-end ms-3">
+        <div class="d-flex align-items-center">
+          <span class="hint m-3" >{{ getCategoryForCurrentWord() }}</span>
+          <button type="button" class="btn btn-transparent" (click)="revelarPista()"><i class="fas fa-question-circle"></i></button>
+          <span class="m-3 text-success">5<i class="fa fa-usd text-success ms-1" aria-hidden="true"></i></span>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      
+      
+      
+      
+      <!-- <span class="hidden-word  fw-bold">{{ gameOver ? word : '*****' }}  <span class="ms-2"> {{success ? '✔' : ''}}</span> </span> -->
+      <span class="hidden-word fw-bold">
+        <ng-container *ngFor="let letra of letrasReveladas; let i = index">
+          {{ letra }}
+          <ng-container *ngIf="i >= letrasReveladas.length - (5 - letrasReveladas.length)">
+            {{ word[i] }}
+          </ng-container>
+        </ng-container>
+        <span class="ms-2">{{ success ? '✔' : '' }}</span>
+      </span>
+      
+      
+      <span class="">{{success ? mensajeSuccess : ''}}</span>
+    </div>
+    
+  </div>
+  <div class="game">
+    <div
+      class="game-row"
+      *ngFor="let row of rows"
+    >
+      <ng-container *ngFor="let col of columns;">
+        <input
+          #input
+          type="text"
+          maxlength="1"
+          class="cell"
+					[(ngModel)]="chars[col]"
+          (ngModelChange)="handleInputChange($event)"
+          (keydown)="handleBackspace($event)"
+          *ngIf="currentRow === row; else answer"
+					[ngClass]="answers[row][col]?.present ? 'present' : 'not-present'"
+          [class]="answers[row][col]?.onPosition ? 'on-position' : ''"
+					[class]="isWrong ? 'error' : ''"
+					
+        />
+        <ng-template #answer>
+          <span
+            class="cell"
+            [ngClass]="answers[row][col]?.present ? 'present' : 'not-present'"
+            [class]="answers[row][col]?.onPosition ? 'on-position' : ''"
+          >
+            {{ answers[row][col]?.char ?? "" | uppercase }}
+          </span>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+@media (max-width: 767px) {
+    .navbar-nav-mobile {
+      display: block;
+      margin-top: 8px; /* Ajusta el margen superior según sea necesario */
+    }
+  
+    .navbar-nav-mobile .nav-link {
+      display: block;
+      padding: 0.5rem 1rem; /* Ajusta el relleno según sea necesario */
+    }
+  }
+.bg-nav{
+    background-color:rgb(236, 236, 236);
+}
+

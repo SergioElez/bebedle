@@ -1,0 +1,28 @@
+
+<div class="m-3 ">
+  <div class="row text-center">
+    <div class="col-12">
+      <h2>Tienda</h2>
+      <p>Tus puntos: {{ puntos }}</p>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="m-1 col-12" *ngFor="let desbloqueable of desbloqueables; let i = index">
+      <div class="card mb-3">
+        <img src="assets/tienda/{{desbloqueable.nombre}}.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ desbloqueable.nombre }}</h5>
+          <p class="card-text">Puntos: {{ desbloqueable.puntos }}</p>
+          <ng-container *ngIf="desbloqueable.comprado; else comprarButton">
+            <i class="fas fa-check-circle text-success"></i> Comprado
+          </ng-container>
+          <ng-template #comprarButton>
+            <button class="btn btn-primary" (click)="comprarDesbloqueable(desbloqueable.nombre)">Comprar</button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
