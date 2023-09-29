@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-
+import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class BdService {
   private storageKey = 'bdData';
+  
+  private puntosSubject = new BehaviorSubject<number>(0);
+
+  // Observable para que los componentes puedan suscribirse a los cambios en los puntos
+  puntos$: Observable<number> = this.puntosSubject.asObservable();
 
   private getInitialData(): any {
     return {
@@ -20,6 +25,7 @@ export class BdService {
       }
     };
   }
+  
 
   private initializeDataIfNeeded(): void {
     const jsonData = localStorage.getItem(this.storageKey);
@@ -29,18 +35,37 @@ export class BdService {
     }
   }
 
+  // getJsonData(): Promise<any> {
+    // return new Promise((resolve, reject) => {
+      // this.initializeDataIfNeeded();
+      // const jsonData = localStorage.getItem(this.storageKey);
+      
+      // if (jsonData) {
+        // resolve(JSON.parse(jsonData));
+      // } else {
+        // reject(new Error('No se encontraron datos en el almacenamiento local'));
+      // }
+    // });
+  // }
+  
   getJsonData(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       this.initializeDataIfNeeded();
       const jsonData = localStorage.getItem(this.storageKey);
-      
+  
       if (jsonData) {
         resolve(JSON.parse(jsonData));
       } else {
         reject(new Error('No se encontraron datos en el almacenamiento local'));
       }
+    }).then(jsonData => {
+      // Notificar cambios en los puntos
+      this.puntosSubject.next(jsonData.puntos);
+      return jsonData;
     });
   }
+  
+  
 
   writeJsonData(data: any): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -66,13 +91,15 @@ export class BdService {
   }
 
   comprarDesbloqueable(nombreDesbloqueable: string): Promise<void> {
+    let desbloqueable: any; // Declarar desbloqueable fuera de los bloques then
+    
     return this.getJsonData()
       .then(jsonData => {
         const desbloqueables = jsonData.desbloqueables;
-        const desbloqueable = desbloqueables.find((d: any) => d.nombre === nombreDesbloqueable);
-
+        desbloqueable = desbloqueables.find((d: any) => d.nombre === nombreDesbloqueable); // Asignar a desbloqueable aquí
+  
         console.log(jsonData);
-
+  
         if (desbloqueable && desbloqueable.comprado === false && jsonData.puntos >= desbloqueable.puntos) {
           jsonData.puntos -= desbloqueable.puntos;
           desbloqueable.comprado = true;
@@ -81,23 +108,80 @@ export class BdService {
           throw new Error('No se puede comprar el desbloqueable o no tienes suficientes puntos');
         }
       })
+      .then(() => {
+        if (desbloqueable) { // Verificar si desbloqueable está definido
+          // Notificar cambios en los puntos
+          this.puntosSubject.next(this.puntosSubject.value - desbloqueable.puntos);
+        }
+      })
       .catch(error => {
         console.error('Error al comprar el desbloqueable:', error);
         throw error;
       });
   }
   
+  
+  
+  // incrementarPuntos(cantidad: number): Promise<void> {
+    // return this.getJsonData()
+      // .then(jsonData => {
+        // jsonData.puntos += cantidad;
+        // return this.writeJsonData(jsonData);
+      // })
+      // .catch(error => {
+        // console.error('Error al incrementar los puntos:', error);
+        // throw error;
+      // });
+  // }
+  
+  // decrementarPuntos(cantidad: number): Promise<void> {
+    // return this.getJsonData()
+      // .then(jsonData => {
+        // jsonData.puntos -= cantidad;
+        // if(jsonData.puntos <= 0) jsonData.puntos = jsonData.puntos;
+        // return this.writeJsonData(jsonData);
+      // })
+      // .catch(error => {
+        // console.error('Error al incrementar los puntos:', error);
+        // throw error;
+      // });
+  // }
+  
   incrementarPuntos(cantidad: number): Promise<void> {
     return this.getJsonData()
       .then(jsonData => {
         jsonData.puntos += cantidad;
+        console.log(jsonData)
+        
         return this.writeJsonData(jsonData);
+      })
+      .then(() => {
+        // Notificar cambios en los puntos
+        this.puntosSubject.next(this.puntosSubject.value + cantidad);
       })
       .catch(error => {
         console.error('Error al incrementar los puntos:', error);
         throw error;
       });
   }
+  
+  decrementarPuntos(cantidad: number): Promise<void> {
+    return this.getJsonData()
+      .then(jsonData => {
+        jsonData.puntos -= cantidad;
+        if (jsonData.puntos <= 0) jsonData.puntos = 0;
+        return this.writeJsonData(jsonData);
+      })
+      .then(() => {
+        // Notificar cambios en los puntos
+        this.puntosSubject.next(Math.max(0, this.puntosSubject.value - cantidad));
+      })
+      .catch(error => {
+        console.error('Error al decrementar los puntos:', error);
+        throw error;
+      });
+  }
+  
   
   setMinijuegoCompletado(minijuego: string, completado: boolean): Promise<void> {
     return this.getJsonData()

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BdService } from './bd.service';
 import { SoundService } from './sound.service';
-
+import { BehaviorSubject, Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -25,6 +25,10 @@ export class AppComponent {
     const muteMusic = localStorage.getItem('muteMusic');
     this.isMuted = muteMusic === 'true';
     console.log(this.isMuted);
+    
+    this.bdService.puntos$.subscribe((puntos) => {
+      this.puntos = puntos;
+    });
   }
 
   obtenerPuntos(): void {

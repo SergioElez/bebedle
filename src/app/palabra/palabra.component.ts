@@ -58,6 +58,7 @@ export class PalabraComponent implements OnInit, AfterViewInit {
   categoryWords!: string[];
   allWords!: string[];
   usedWords: Set<string> = new Set<string>();
+  costePista: number = 5;
   pistasUtilizadas: number = 0;
   letrasReveladas: string[] = [];
 
@@ -80,11 +81,12 @@ export class PalabraComponent implements OnInit, AfterViewInit {
   revelarPista() {
     // Verifica si todavía hay letras ocultas para revelar
     if (this.pistasUtilizadas < 5) {
+      
       let letraOcultaIndex = -1;
   
-      // Encuentra la próxima letra oculta en la palabra
+      // Encuentra la próxima letra oculta en la palabra que aún no se ha adivinado correctamente
       for (let i = 0; i < 5; i++) {
-        if (!this.answers[this.currentRow][i]?.present) {
+        if (!this.answers[this.currentRow][i]?.present && !this.letrasReveladas.includes(this.word.charAt(i))) {
           letraOcultaIndex = i;
           break;
         }
@@ -106,75 +108,73 @@ export class PalabraComponent implements OnInit, AfterViewInit {
           this.word.substr(0, letraOcultaIndex) +
           letraOculta +
           this.word.substr(letraOcultaIndex + 1);
-        
+  
         this.letrasReveladas[letraOcultaIndex] = letraOculta;
+  
+        this.bdService.decrementarPuntos(this.costePista);
+        this.costePista += 5;
       }
     }
   }
-  
   
   
   
 
   ngOnInit(): void {
     this.soundService.stopAll();
-    this.letrasReveladas = ['*', '*', '*', '*', '*'];
     
     this.categories = Object.keys(palabras);
     this.allWords = this.getAllWords();
-    
     
     const storedWord = this.getStoredWord();
     const storedDate = this.getStoredWordDate();
     this.gameOver = this.getGameOver() as boolean;
     this.success = this.getSuccess() as boolean;
   
-    if(this.success){
-      this.getRandomSuccessMessage()
-    }
-    
-    const storedUsedWords = this.getStoredUsedWords();
-    if (storedUsedWords) {
-      this.usedWords = storedUsedWords;
-    }
-  
-    const currentDate = new Date().toLocaleDateString();
-    if (storedWord && storedDate === currentDate) {
+    if (storedWord && storedDate === new Date().toLocaleDateString()) {
       this.word = storedWord;
     } else {
       this.word = this.generateWord();
       this.storeWord(this.word);
-      this.storeWordDate(currentDate);
+      this.storeWordDate(new Date().toLocaleDateString());
     }
-    // this.word =  this.generateWord();
+    
+    if (this.success) {
+      // Si success es true, muestra todas las letras reveladas
+      this.letrasReveladas = this.word.split('');
+      this.getRandomSuccessMessage();
+    } else {
+      // Si no hay success, inicializa letrasReveladas con asteriscos
+      this.letrasReveladas = ['*', '*', '*', '*', '*'];
+    }
+  
     console.log(this.word);
     console.log(this.allWords);
     console.log(this.usedWords);
-
+  
     const now = new Date();
     const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     const timeUntilMidnight = nextMidnight.getTime() - now.getTime();
     
-    
-
     setTimeout(() => {
       const newWord = this.generateWord();
       if (newWord) {
         this.word = newWord;
         this.storeWord(this.word);
-        this.storeWordDate(currentDate);
-
+        this.storeWordDate(new Date().toLocaleDateString());
+  
         setInterval(() => {
           const newWord = this.generateWord();
           if (newWord) {
             this.word = newWord;
             this.storeWord(this.word);
-            this.storeWordDate(currentDate);
+            this.storeWordDate(new Date().toLocaleDateString());
           }
         }, 24 * 60 * 60 * 1000);
       }
     }, timeUntilMidnight);
   }
+  
 
   isNewDay(): boolean {
     const storedDate = localStorage.getItem('currentWordDate');
@@ -291,13 +291,32 @@ export class PalabraComponent implements OnInit, AfterViewInit {
   
   checkWord() {
     const isValidWord = this.categoryWords.includes(this.currentWord.trim());
-
-    if(this.currentWord.trim() == this.word){
+  
+    if (this.currentWord.trim() == this.word) {
       if (!this.success) {
-        this.bdService.incrementarPuntos(50);
-        this.toast.success('Has ganado 50 puntos!', 'Enhorabuena bebita' );
+      
+        let data = localStorage.getItem('bdData');
+        if (data !== null) {
+          // Si data no es nulo, entonces puedes intentar analizarlo como JSON
+          let jsonData = JSON.parse(data);
+          
+          // Modifica la cantidad de puntos según tus necesidades
+          let nuevaCantidadDePuntos = 50 + jsonData.puntos; // Cambia esto por la cantidad deseada
+        
+          // Actualiza la cantidad de puntos en el objeto jsonData
+          jsonData.puntos = nuevaCantidadDePuntos;
+          let newData = JSON.stringify(jsonData);
+
+          // Actualiza los datos en el almacenamiento local
+          localStorage.setItem('bdData', newData);
+          this.toast.success('Has ganado 50 puntos!', 'Enhorabuena bebita');
+        } else {
+          // Maneja el caso en el que 'bdData' no existe en el almacenamiento local
+          console.error('La clave "bdData" no se encuentra en el almacenamiento local.');
+        }
+        
       }
-    
+  
       this.success = true;
       this.gameOver = true;
       this.storeGameOver(true);
@@ -305,7 +324,7 @@ export class PalabraComponent implements OnInit, AfterViewInit {
       this.getRandomSuccessMessage();
       this.soundService.playAciertoSound();
     }
-
+  
     if (isValidWord && !this.allWords.includes(this.currentWord.trim())) {
       this.gameOver = true;
       this.storeGameOver(true);
@@ -314,8 +333,14 @@ export class PalabraComponent implements OnInit, AfterViewInit {
         present: true,
         onPosition: char === this.word[index],
       }));
-    } else {
       
+      // Agregar las letras acertadas a letrasReveladas
+      for (let i = 0; i < this.currentWord.length; i++) {
+        if (this.word[i] === this.currentWord[i]) {
+          this.letrasReveladas[i] = this.currentWord[i];
+        }
+      }
+    } else {
       for (let i = 0; i < 5; i++) {
         if (this.word[i] === this.currentWord[i]) {
           this.answers[this.currentRow][i] = {
@@ -323,6 +348,9 @@ export class PalabraComponent implements OnInit, AfterViewInit {
             present: true,
             onPosition: true,
           };
+          
+          // Agregar las letras acertadas a letrasReveladas
+          this.letrasReveladas[i] = this.currentWord[i];
         } else if (this.word.includes(this.currentWord[i])) {
           this.answers[this.currentRow][i] = {
             char: this.currentWord[i],
@@ -337,7 +365,7 @@ export class PalabraComponent implements OnInit, AfterViewInit {
         }
       }
     }
-
+  
     this.currentRow++;
     this.chars = [];
     if (this.currentRow >= 5) {
@@ -345,6 +373,7 @@ export class PalabraComponent implements OnInit, AfterViewInit {
       this.gameOver = true;
     }
   }
+  
 
   handleInputChange(event: Event) {
     this.currentWord = this.chars.join('');

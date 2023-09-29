@@ -7,7 +7,7 @@ export const palabras = {
 		"apoyo",
 		"calma",
 	],
-	"¿Que es mi bebé? Es:":[
+	"¿Que es mi bebé?":[
 		"angel",
 		"bella",
 		"linda",
