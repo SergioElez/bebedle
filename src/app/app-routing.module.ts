@@ -4,8 +4,10 @@ import { AdivinarDiaComponent } from './adivinar-dia/adivinar-dia.component';
 import { HomeComponent } from './home/home.component';
 import { PalabraComponent } from './palabra/palabra.component';
 import { TiendaComponent } from './tienda/tienda.component';
+import { FotoGraciosaComponent } from './foto-graciosa/foto-graciosa.component';
 
 const routes: Routes = [
+  { path: 'foto-graciosa', component: FotoGraciosaComponent },
   { path: 'adivinar-dia', component: AdivinarDiaComponent },
   { path: 'palabra', component: PalabraComponent },
   { path: 'tienda', component: TiendaComponent },

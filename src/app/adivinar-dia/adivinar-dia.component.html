@@ -17,13 +17,25 @@
         <br>
         <h5>En que dia se hizo esta foto?</h5>
         <div class="col-md-6" *ngFor="let opcion of preguntaActual.opciones.slice(0, 4)">
-          <button type="button" class="btn btn-primary mb-2" 
-            [ngClass]="{'btn-success': opcion === respuestaSeleccionada}"
-            (click)="respuestaSeleccionada = opcion" style="margin-bottom: 10px;">
-            {{ opcion }}
-          </button>
-        </div>
+          <button type="button" class="btn mb-2 btn-primary" 
+            [ngClass]="{
+            'btn-secondary': opcion === respuestaSeleccionada, 
+            'btn-success': mostrarRespuesta && opcion === respuestaSeleccionada && preguntaActual.respuesta === respuestaSeleccionada, 
+            'btn-danger': mostrarRespuesta && opcion === respuestaSeleccionada && preguntaActual.respuesta !== respuestaSeleccionada}" 
+            (click)="respuestaSeleccionada = opcion" style="margin-bottom: 10px;"
+            [disabled]="mostrarRespuesta">
+          {{ opcion }}
+         </button>
+        <span *ngIf="mostrarRespuesta && opcion === respuestaSeleccionada && respuestaSeleccionada === preguntaActual.respuesta" class="text-success m-1">✔</span>
+        <span *ngIf="mostrarRespuesta && opcion === respuestaSeleccionada && respuestaSeleccionada !== preguntaActual.respuesta" class="text-danger m-1">✖</span>
         
+        
+        
+      </div>
+      <div class="col-md-12 mt-4" *ngIf="mostrarRespuesta">
+        <p *ngIf="respuestaSeleccionada === preguntaActual.respuesta" class="text-success">¡Respuesta correcta!</p>
+        <p *ngIf="respuestaSeleccionada !== preguntaActual.respuesta" class="text-danger">Respuesta incorrecta</p>
+      </div>
         
         
         <!-- <div class="col-md-6"> -->
@@ -35,12 +47,12 @@
         <!-- </div> -->
         <div class="col-md-12">
           <div class="text-center mt-4">
-            <button type="button" class="btn btn-secondary" (click)="enviarRespuesta()">Enviar respuesta</button>
+            <button type="button" class="btn btn-success" (click)="enviarRespuesta()">Enviar respuesta</button>
           </div>
         </div>
         <div class="col-md-12 mt-4" *ngIf="mostrarRespuesta">
-          <p *ngIf="respuestaSeleccionada === preguntaActual.respuesta" class="text-success">¡Respuesta correcta!</p>
-          <p *ngIf="respuestaSeleccionada !== preguntaActual.respuesta" class="text-danger">Respuesta incorrecta</p>
+          <!-- <p *ngIf="respuestaSeleccionada === preguntaActual.respuesta" class="text-success">¡Respuesta correcta!</p> -->
+          <!-- <p *ngIf="respuestaSeleccionada !== preguntaActual.respuesta" class="text-danger">Respuesta incorrecta</p> -->
         </div>
       </div>
     </div>

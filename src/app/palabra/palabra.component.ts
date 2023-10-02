@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { palabras } from 'src/assets/WORDS';
+import { palabras } from './WORDS';
 import { BdService } from '../bd.service';
 import { SoundService } from '../sound.service';
 
@@ -117,9 +117,6 @@ export class PalabraComponent implements OnInit, AfterViewInit {
     }
   }
   
-  
-  
-
   ngOnInit(): void {
     this.soundService.stopAll();
     
@@ -289,32 +286,39 @@ export class PalabraComponent implements OnInit, AfterViewInit {
     this.mensajeSuccess = this.successMessages[randomIndex];
   }
   
+  sumarPuntos(){
+    let data = localStorage.getItem('bdData');
+    if (data !== null) {
+      // Si data no es nulo, entonces puedes intentar analizarlo como JSON
+      let jsonData = JSON.parse(data);
+      
+      // Modifica la cantidad de puntos según tus necesidades
+      let nuevaCantidadDePuntos = 50 + jsonData.puntos; // Cambia esto por la cantidad deseada
+    
+      // Actualiza la cantidad de puntos en el objeto jsonData
+      jsonData.puntos = nuevaCantidadDePuntos;
+      let newData = JSON.stringify(jsonData);
+
+      // Actualiza los datos en el almacenamiento local
+      localStorage.setItem('bdData', newData);
+      this.toast.success('Has ganado 50 puntos!', 'Enhorabuena bebita');
+    } else {
+      // Maneja el caso en el que 'bdData' no existe en el almacenamiento local
+      console.error('La clave "bdData" no se encuentra en el almacenamiento local.');
+    }
+  }
+  
   checkWord() {
+  //  this.toast.success(this.allWords.toString(), 'allWords');
+    // this.toast.success(this.currentWord.toString(), 'currentWord');
+    // this.toast.success(this.categoryWords.toString(), 'categoryWords');
+  
+  
     const isValidWord = this.categoryWords.includes(this.currentWord.trim());
   
     if (this.currentWord.trim() == this.word) {
       if (!this.success) {
-      
-        let data = localStorage.getItem('bdData');
-        if (data !== null) {
-          // Si data no es nulo, entonces puedes intentar analizarlo como JSON
-          let jsonData = JSON.parse(data);
-          
-          // Modifica la cantidad de puntos según tus necesidades
-          let nuevaCantidadDePuntos = 50 + jsonData.puntos; // Cambia esto por la cantidad deseada
-        
-          // Actualiza la cantidad de puntos en el objeto jsonData
-          jsonData.puntos = nuevaCantidadDePuntos;
-          let newData = JSON.stringify(jsonData);
-
-          // Actualiza los datos en el almacenamiento local
-          localStorage.setItem('bdData', newData);
-          this.toast.success('Has ganado 50 puntos!', 'Enhorabuena bebita');
-        } else {
-          // Maneja el caso en el que 'bdData' no existe en el almacenamiento local
-          console.error('La clave "bdData" no se encuentra en el almacenamiento local.');
-        }
-        
+       this.sumarPuntos();
       }
   
       this.success = true;
@@ -325,6 +329,7 @@ export class PalabraComponent implements OnInit, AfterViewInit {
       this.soundService.playAciertoSound();
     }
   
+   
     if (isValidWord && !this.allWords.includes(this.currentWord.trim())) {
       this.gameOver = true;
       this.storeGameOver(true);
@@ -381,9 +386,12 @@ export class PalabraComponent implements OnInit, AfterViewInit {
     this.currentCol !== 5 ? (this.currentCol = this.chars.length) : (this.currentCol = 0);
     this.inputs[this.currentCol].nativeElement.focus();
 
+    
+    
     if (this.chars.length === 5) {
+      this.currentWord = this.currentWord.toLowerCase();
       const isValidWord = this.allWords.includes(this.currentWord);
-
+      
       if (isValidWord) {
         this.checkWord();
       } else {
@@ -421,4 +429,10 @@ export class PalabraComponent implements OnInit, AfterViewInit {
     this.isWrong = false;
     this.gameOver = false;
   }
+  
+  debug(){
+    this.sumarPuntos();
+    localStorage.setItem('currentWordDate', '');
+  }
+  
 }

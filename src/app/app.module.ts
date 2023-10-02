@@ -14,13 +14,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FotoGraciosaComponent } from './foto-graciosa/foto-graciosa.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AdivinarDiaComponent,
     PalabraComponent,
-    TiendaComponent
+    TiendaComponent,
+    FotoGraciosaComponent
     
   ],
   imports: [

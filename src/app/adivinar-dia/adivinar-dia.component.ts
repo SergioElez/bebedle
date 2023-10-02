@@ -29,6 +29,11 @@ export class AdivinarDiaComponent implements OnInit {
       opciones: ['Viaje a Roma', 'Viaje a Francia', 'Casa', 'Boda'],
       fotos: ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg']
     },
+    {
+      respuesta: 'Viaje a Roma',
+      opciones: ['pito', 'Viaje a Francia', 'Casa', 'Boda'],
+      fotos: ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg']
+    },
     // Otras preguntas...
   ];
 
