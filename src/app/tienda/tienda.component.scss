@@ -1,0 +1,9 @@
+.scrollable-div {
+    width: 100%; /* Ancho deseado para el div */
+    height: 30em; /* Altura deseada para el div */
+    overflow: auto; /* Esto habilita el scroll cuando el contenido excede las dimensiones del div */
+    border: 1px solid #ccc; /* Puedes agregar bordes o estilos adicionales si lo deseas */
+    padding: 10px; /* Espacio interior para el contenido */
+    border-radius: 1em;
+  }
+ 

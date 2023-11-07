@@ -121,7 +121,11 @@ export class PalabraComponent implements OnInit, AfterViewInit {
     this.soundService.stopAll();
     
     this.categories = Object.keys(palabras);
-    this.allWords = this.getAllWords();
+    this.getAllWords().then(words => {
+      this.allWords = words;
+      console.log(this.allWords);
+      
+    });
     
     const storedWord = this.getStoredWord();
     const storedDate = this.getStoredWordDate();
@@ -229,18 +233,39 @@ export class PalabraComponent implements OnInit, AfterViewInit {
     localStorage.setItem('currentWord', word);
   }
 
-  getAllWords(): string[] {
-    const words: string[] = [];
-
-    for (const category in palabras as any) {
-      if (palabras.hasOwnProperty(category)) {
-        this.categoryWords = (palabras as any)[category];
-        words.push(...this.categoryWords);
-      }
-    }
-
-    return words;
+  getAllWords(): Promise<string[]> {
+    return this.bdService.getJsonData()
+      .then(data => {
+        const desbloqueables = data.desbloqueables;
+        const words: string[] = [];
+  
+        for (const category in palabras) {
+          if (palabras.hasOwnProperty(category)) {
+            const categoryWords = palabras[category];
+  
+            // Obtén el índice correspondiente en desbloqueables
+            const index = categoryWords.length > 0 ? categoryWords[0].length / 10 : 0;
+  
+            // Verifica si el elemento correspondiente en desbloqueables está comprado
+            if (desbloqueables[index] && !desbloqueables[index].comprado) {
+              continue; // Salta la categoría si no está comprada
+            }
+  
+            words.push(...categoryWords);
+          }
+        }
+  
+        return words;
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos:', error);
+        return []; // Maneja el error y devuelve un array vacío o lo que sea apropiado
+      });
   }
+  
+  
+  
+  
 
   generateWord(): string {
     this.storeSuccess(false);

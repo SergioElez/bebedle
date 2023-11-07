@@ -1,4 +1,4 @@
-export const palabras = {
+export const palabras: { [key: string]: string[] } = {
 	"¿Que es lo que le doy a mi bebita?":[
 		"besos",
 		"mimos",
@@ -8,6 +8,9 @@ export const palabras = {
 		"calma",
 		"pedos",
 		"humor",
+	],
+	"¿Como se siente mi bebe?":[
+		"amada",
 	],
 	"¿Que es mi bebé?":[
 		"angel",
@@ -62,8 +65,5 @@ export const palabras = {
 		"jiñar",
 		"nadar",
 		"plata",
-	],
-	"¿Como se siente mi bebe?":[
-		"amada",
-	],
+	]
 }

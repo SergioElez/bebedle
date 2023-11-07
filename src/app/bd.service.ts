@@ -15,9 +15,12 @@ export class BdService {
     return {
       puntos: 0,
       desbloqueables: [
-        { nombre: 'Minijuego 1', puntos: 12, comprado: false },
-        { nombre: 'Minijuego 2', puntos: 12, comprado: false },
-        { nombre: 'Minijuego 3', puntos: 12, comprado: false }
+        { nombre: '💬 Nueva categoria de palabras: ¿Que es mi bebé?', puntos: 10, comprado: false, cat: 'p' },
+        { nombre: '📅 Nuevo minijuego: Adivina el dia', puntos: 30, comprado: false, cat: 'game' },
+        { nombre: '💬 Nueva categoria de palabras: ¿Que es lo que más le gusta al bebito?', puntos: 50, comprado: false, cat: 'p' },
+        { nombre: '📅 Nuevo minijuego: Foto más graciosa', puntos: 150, comprado: false, cat: 'game' },
+        { nombre: '💬 Nueva categoria de palabras: ¿Que es lo que más le gusta a la bebita?', puntos: 50, comprado: false, cat: 'p' },
+        { nombre: '📽 Video del desarrollo de Bebedle, pideselo al bebito', puntos: 500, comprado: false },
       ],
       minijuegosCompletados: {
         palabra: true,

@@ -22,7 +22,7 @@
         "tsconfig.json": true,
         "tsconfig.spec.json": true,
         "tslint.json": true,
-        "*/assets": true,
+        "*/assets": false,
         "*/environments": true,
         "*/favicon.ico": true,
         "*/index.html": true,
@@ -78,5 +78,6 @@
         "*/*.gitignore": true,
         "*/**/**.meta": true
     },
-    "hide-files.files": []
+    "hide-files.files": [],
+    "explorerExclude.backup": {}
 }
