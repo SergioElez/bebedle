@@ -77,6 +77,8 @@ export class AdivinarDiaComponent implements OnInit {
   mostrarRespuesta: boolean = false;
 
   enviarRespuesta(): void {
+  
+    this.pistasCompradas = this.preguntaActual.fotos.length;
     
     this.aciertoSound.play();
     if (this.respuestaSeleccionada !== '') {
