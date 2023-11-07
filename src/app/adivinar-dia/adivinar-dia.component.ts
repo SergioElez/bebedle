@@ -12,6 +12,7 @@ import { BdService } from '../bd.service';
 export class AdivinarDiaComponent implements OnInit {
 
 // Por ejemplo, crea instancias de Howl para los sonidos de acierto y error
+  cantBuy: Howl;
   bip: Howl;
   aciertoSound: Howl;
   errorSound: Howl;
@@ -19,6 +20,7 @@ export class AdivinarDiaComponent implements OnInit {
 
   constructor(private soundService:SoundService, private toast: ToastrService,  
     private bdService: BdService) {
+    this.cantBuy = new Howl({ src: ['assets/cantBuy.wav'] });
     this.bip = new Howl({ src: ['assets/bip.wav'] });
     this.aciertoSound = new Howl({ src: ['assets/acierto.mp3'] });
     this.errorSound = new Howl({ src: ['assets/error.mp3'] });
@@ -42,6 +44,8 @@ export class AdivinarDiaComponent implements OnInit {
     // Otras preguntas...
   ];
 
+  preguntaIndex: number = 0;
+  
   preguntaActual: {
     respuesta: string;
     opciones: string[];
@@ -57,16 +61,19 @@ export class AdivinarDiaComponent implements OnInit {
 
 
   ngOnInit() {
-    const preguntaIndex = Math.floor(Math.random() * this.preguntas.length);
-    this.preguntaActual = this.preguntas[preguntaIndex];
+    this.preguntaIndex = Math.floor(Math.random() * this.preguntas.length);
+    this.preguntaActual = this.preguntas[this.preguntaIndex];
     this.soundService.playBackground('quiz');
   }
   
   comprarPista(){
+  //TODO hacer que gaste dinero
     if (this.pistasCompradas < this.preguntaActual.fotos.length - 1) {
       this.bip.play();
       this.pistasCompradas++;
       this.imagenActual = (this.pistasCompradas) ;
+    } else{
+      this.cantBuy.play();
     }
   }
   
