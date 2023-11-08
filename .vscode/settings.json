@@ -22,7 +22,7 @@
         "tsconfig.json": true,
         "tsconfig.spec.json": true,
         "tslint.json": true,
-        "*/assets": false,
+        "*/assets": true,
         "*/environments": true,
         "*/favicon.ico": true,
         "*/index.html": true,

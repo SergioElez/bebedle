@@ -27,33 +27,278 @@ export class AdivinarDiaComponent implements OnInit {
   }
 
   preguntas: {
-    respuesta: string;
+    pregunta: string;
+    respuesta: number;
     opciones: string[];
-    fotos: string[];
+    fotos: number;
   }[] = [
     {
-      respuesta: 'Viaje a Roma',
-      opciones: ['Viaje a Roma', 'Viaje a Francia', 'Casa', 'Boda'],
-      fotos: ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg']
+      pregunta: '¿Qué hicimos este dia?',
+      opciones: [
+        'Ir al Suitopia', 
+        'Comer en el Antica Roma', 
+        'Ir al morro de Toix', 
+        'Todas son correctas'
+      ],
+      respuesta: 4,
+      fotos: 4
     },
-    // {
-      // respuesta: 'Viaje a Francia',
-      // opciones: ['pito', 'Viaje a Francia', 'Casa', 'Boda'],
-      // fotos: ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg']
-    // },
-    // Otras preguntas...
+    {
+      pregunta: '¿Qué fue lo que hicimos en la feria?',
+      opciones: [
+        'Patinar', 
+        'Dar un paseo', 
+        'Tirar dardos en un puesto', 
+        'Comprar una patata asada'
+      ],
+      respuesta: 3,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Cual fue el regalo del bebito por navidad?',
+      opciones: [
+        'Una pulsera y una polla', 
+        'Un charm, un bikini y el unicorns', 
+        'Una carta, un bikini, un charm y el unicorns', 
+        'Una polla, una funda, una pulsera y el unicorns', 
+      ],
+      respuesta: 4,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Dónde estan hechas estas fotos?',
+      opciones: [
+        'En un parque', 
+        'En las salinas', 
+        'En el campo', 
+        'En benidorm'
+      ],
+      respuesta: 4,
+      fotos: 2
+    },
+    {
+      pregunta: '¿Qué fue lo que te compraron y no te comiste en la tia Pa?',
+      opciones: [
+        'Pizza', 
+        'Pepino', 
+        'Aceitunas', 
+        'Cocas'
+      ],
+      respuesta: 2,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Qué fue lo que hicimos este dia?',
+      opciones: [
+        'Ir de tiendas por calpe', 
+        'Comer al vips', 
+        'Hacernos una sesion de fotos en el HM', 
+        'Comer en el KFC'
+      ],
+      respuesta: 3,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Como se llama este gato?',
+      opciones: [
+        'Algodón', 
+        'Aguacate',
+        'Raspi', 
+        'Melocotón'
+      ],
+      respuesta: 4,
+      fotos: 3
+    },
+    {
+      pregunta: '¿Qué fue lo que hicimos este dia?',
+      opciones: [
+        'Ir a misa', 
+        'Ir a al museo', 
+        'Hacernos una sesion de fotos', 
+        'Todas son correctas'
+      ],
+      respuesta: 1,
+      fotos: 3
+    },
+    {
+      pregunta: '¿Qué celebramos este dia?',
+      opciones: [
+        'San Valentín', 
+        'El medio año', 
+        'El año', 
+        'El cumple de la bebita'
+      ],
+      respuesta: 2,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Qué hicimos este dia?',
+      opciones: [
+        'Ir al corro', 
+        'Ir al museo', 
+        'Conocer a tu primo Sandro', 
+        'Todas son correctas'
+      ],
+      respuesta: 4,
+      fotos: 4
+    },
+    {
+      pregunta: '¿En lugar se hicieron estas fotos?',
+      opciones: [
+        'En burgos',
+        'En calpe', 
+        'En murcia', 
+        'En benidorm', 
+      ],
+      respuesta: 1,
+      fotos: 4
+    },
+    {
+      pregunta: '¿En lugar se hicieron estas fotos?',
+      opciones: [
+        'En Fresneña',
+        'En Belorado', 
+        'En Calpe', 
+        'En Benidorm', 
+      ],
+      respuesta: 1,
+      fotos: 4
+    },
+    {
+      pregunta: '¿En lugar se hicieron estas fotos?',
+      opciones: [
+        'En Fresneña',
+        'En Belorado', 
+        'En Calpe', 
+        'En Benidorm', 
+      ],
+      respuesta: 2,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Qué fue lo que vimos este dia?',
+      opciones: [
+        'Un niño tropezarse',
+        'Gente escalando', 
+        'Una pelea de gaviotas', 
+        'Gente haciendo surf', 
+      ],
+      respuesta: 2,
+      fotos: 3
+    },
+    {
+      pregunta: '¿Qué personas fueron a esta comida?',
+      opciones: [
+        'El bebito, la bebita y la mami',
+        'El bebito, la bebita, la mami y el papi',
+        'El bebito, la bebita y el papi',
+        'El bebito, la bebita, la mami, el papi y mi tia',
+      ],
+      respuesta: 1,
+      fotos: 2
+    },
+    {
+      pregunta: '¿A donde fuimos a este dia?',
+      opciones: [
+        'Al Suitopia',
+        'De fiesta',
+        'Al circo',
+        'A cenar al padrino',
+      ],
+      respuesta: 3,
+      fotos: 3
+    },
+    {
+      pregunta: '¿Qué comimos este dia?',
+      opciones: [
+        'Hamburguesa',
+        'Comida china',
+        'Pasta y pizza',
+        'Ensalada y escalope',
+      ],
+      respuesta: 2,
+      fotos: 3
+    },
+    {
+      pregunta: '¿Qué comimos este dia?',
+      opciones: [
+        'A la playa',
+        'A la piscina',
+        'Al Aqualandia',
+        'Al parque cerca del colegio',
+      ],
+      respuesta: 3,
+      fotos: 4
+    },
+    {
+      pregunta: '¿En que lugar se han hecho estas fotos?',
+      opciones: [
+        'Madrid',
+        'Alicante',
+        'Burgos',
+        'Murcia',
+      ],
+      respuesta: 1,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Por donde salimos de fiesta este dia?',
+      opciones: [
+        'Benidorm',
+        'Calpe',
+        'Denia',
+        'Ninguna es correcta',
+      ],
+      respuesta: 3,
+      fotos: 3
+    },
+    {
+      pregunta: '¿En que lugar se han hecho estas fotos?',
+      opciones: [
+        'Madrid',
+        'Alicante',
+        'Burgos',
+        'Murcia',
+      ],
+      respuesta: 4,
+      fotos: 4
+    },
+    {
+      pregunta: '¿En que lugar se han hecho estas fotos?',
+      opciones: [
+        'Madrid',
+        'Alicante',
+        'Burgos',
+        'Murcia',
+      ],
+      respuesta: 1,
+      fotos: 4
+    },
+    {
+      pregunta: '¿Cuales de estas comidas comimos aqui?',
+      opciones: [
+        'Brownie',
+        'Tarta chocolate',
+        'Tarta de oreo',
+        'Pastel casero',
+      ],
+      respuesta: 1,
+      fotos: 4
+    },
   ];
 
   preguntaIndex: number = 0;
   
   preguntaActual: {
-    respuesta: string;
+    pregunta: string;
+    respuesta: number;
     opciones: string[];
-    fotos: string[];
+    fotos: number;
   } = {
-    respuesta: '',
+    pregunta: '',
+    respuesta: 0,
     opciones: [],
-    fotos: []
+    fotos: 0
   };
 
   respuestaSeleccionada: string = ''; // Agregamos el inicializador aquí
@@ -61,14 +306,19 @@ export class AdivinarDiaComponent implements OnInit {
 
 
   ngOnInit() {
+  //TODO calcular con contador
     this.preguntaIndex = Math.floor(Math.random() * this.preguntas.length);
+    this.preguntaIndex = this.preguntas.length - 1;
+    console.log(this.preguntaIndex)
+    
     this.preguntaActual = this.preguntas[this.preguntaIndex];
     this.soundService.playBackground('quiz');
+    
   }
   
   comprarPista(){
   //TODO hacer que gaste dinero
-    if (this.pistasCompradas < this.preguntaActual.fotos.length - 1) {
+    if (this.pistasCompradas < this.preguntaActual.fotos - 1) {
       this.bip.play();
       this.pistasCompradas++;
       this.imagenActual = (this.pistasCompradas) ;
@@ -78,21 +328,22 @@ export class AdivinarDiaComponent implements OnInit {
   }
   
   esRespuestaCorrecta(): boolean {
-    return this.respuestaSeleccionada === this.preguntaActual.respuesta;
+    return this.respuestaSeleccionada === this.preguntaActual.opciones[this.preguntaActual.respuesta - 1];
   }
   
   mostrarRespuesta: boolean = false;
 
   enviarRespuesta(): void {
-  
-    this.pistasCompradas = this.preguntaActual.fotos.length;
+    this.pistasCompradas = this.preguntaActual.fotos;
     
-    this.aciertoSound.play();
     if (this.respuestaSeleccionada !== '') {
+      this.aciertoSound.play();
       this.mostrarRespuesta = true;
+    } else {
+      this.cantBuy.play();
     }
     
-    if(this.respuestaSeleccionada === this.preguntaActual.respuesta){
+    if(this.esRespuestaCorrecta()){
       this.sumarPuntos(20)
     }
   }
@@ -136,6 +387,27 @@ export class AdivinarDiaComponent implements OnInit {
       }
       
       // this.imagenActual = (this.imagenActual - 1 + this.preguntaActual.fotos.length) % this.preguntaActual.fotos.length;
+    }
+    
+    preguntaAnterior(){
+      if(this.preguntaIndex > 0){
+        this.bip.play();
+        this.preguntaIndex--;
+        this.preguntaActual = this.preguntas[this.preguntaIndex];
+      } else{
+        this.cantBuy.play();
+      }
+    }
+    
+    preguntaSiguiente(){
+    //TODO que no supere el dia actual
+      if(this.preguntaIndex < 22){
+        this.bip.play();
+        this.preguntaIndex++;
+        this.preguntaActual = this.preguntas[this.preguntaIndex];
+        } else{
+          this.cantBuy.play();
+        }
     }
   
   

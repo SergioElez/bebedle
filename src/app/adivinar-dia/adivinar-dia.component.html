@@ -2,7 +2,12 @@
   <div class="row">
     <div class="col-md-6 offset-md-3 mb-4">
       <div class="text-center">
-        <h5>Adivina el dia!</h5>
+        <div class="m-4" *ngIf="mostrarRespuesta">
+          <h5>Preguntas anteriores</h5>
+          <button type="button" class="btn btn-success mr-2" (click)="preguntaAnterior()" style="margin-right: 5px;"><i class="fa fa-chevron-left" aria-hidden="true"></i> Anterior</button>
+          <button type="button" class="btn btn-success mr-2" (click)="preguntaSiguiente()" style="margin-right: 5px;">Siguiente<i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+        </div>
+        <h5>¿Cuanto sabe la bebita?</h5>
         <br>
         <div>
           <span>Comprar foto</span>
@@ -21,27 +26,27 @@
           </div>
         </div>
         <br>
-        <h5>En que dia se hizo esta foto?</h5>
-        <div class="col-md-6" *ngFor="let opcion of preguntaActual.opciones.slice(0, 4)">
+        <h5>{{preguntaActual.pregunta}}</h5>
+        <div class="col-md-6" *ngFor="let opcion of preguntaActual.opciones.slice(0, 4); let i = index">
           <button type="button" class="btn mb-2 btn-primary" 
             (click)="bip.play()"
             [ngClass]="{
             'btn-secondary': opcion === respuestaSeleccionada, 
-            'btn-success': mostrarRespuesta && opcion === respuestaSeleccionada && preguntaActual.respuesta === respuestaSeleccionada, 
-            'btn-danger': mostrarRespuesta && opcion === respuestaSeleccionada && preguntaActual.respuesta !== respuestaSeleccionada}" 
+            'btn-success': mostrarRespuesta && opcion === respuestaSeleccionada && esRespuestaCorrecta(), 
+            'btn-danger': mostrarRespuesta && opcion === respuestaSeleccionada && !esRespuestaCorrecta()}" 
             (click)="respuestaSeleccionada = opcion" style="margin-bottom: 10px;"
             [disabled]="mostrarRespuesta">
-          {{ opcion }}
+            <span class="fw-bold">{{ i + 1 }})</span>  {{ opcion }}
          </button>
-        <span *ngIf="mostrarRespuesta && opcion === respuestaSeleccionada && respuestaSeleccionada === preguntaActual.respuesta" class="text-success m-1">✔</span>
-        <span *ngIf="mostrarRespuesta && opcion === respuestaSeleccionada && respuestaSeleccionada !== preguntaActual.respuesta" class="text-danger m-1">✖</span>
+        <span *ngIf="mostrarRespuesta && opcion === respuestaSeleccionada && esRespuestaCorrecta()" class="text-success m-1">✔</span>
+        <span *ngIf="mostrarRespuesta && opcion === respuestaSeleccionada && !esRespuestaCorrecta()" class="text-danger m-1">✖</span>
         
         
         
       </div>
       <div class="col-md-12 mt-4" *ngIf="mostrarRespuesta">
-        <p *ngIf="respuestaSeleccionada === preguntaActual.respuesta" class="text-success">¡Respuesta correcta!</p>
-        <p *ngIf="respuestaSeleccionada !== preguntaActual.respuesta" class="text-danger">Respuesta incorrecta</p>
+        <p *ngIf="esRespuestaCorrecta()" class="text-success">¡Respuesta correcta!</p>
+        <p *ngIf="!esRespuestaCorrecta()" class="text-danger">Respuesta incorrecta</p>
       </div>
         
         
