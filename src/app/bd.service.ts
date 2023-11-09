@@ -23,8 +23,9 @@ export class BdService {
         { nombre: '📽 Video del desarrollo de Bebedle, pideselo al bebito', puntos: 500, comprado: false },
       ],
       minijuegosCompletados: {
-        palabra: true,
-        adivinarDia: false
+        contPalabra: 0,
+        contFotoGraciosa: 0,
+        contAdivinar: 0
       }
     };
   }
@@ -186,11 +187,18 @@ export class BdService {
   }
   
   
-  setMinijuegoCompletado(minijuego: string, completado: boolean): Promise<void> {
+  setMinijuegoCompletado(minijuego: string): Promise<void> {
     return this.getJsonData()
       .then(jsonData => {
         const minijuegosCompletados = jsonData.minijuegosCompletados || {};
-        minijuegosCompletados[minijuego] = completado;
+        if(minijuego === 'palabra'){
+          minijuegosCompletados.contPalabra++;
+        } else  if(minijuego === 'fotoGraciosa'){
+          minijuegosCompletados.contFotoGraciosa++;
+        } else  if(minijuego === 'adivinar'){
+          minijuegosCompletados.contAdivinar++;
+        }
+        
         jsonData.minijuegosCompletados = minijuegosCompletados;
         return this.writeJsonData(jsonData);
       })
@@ -200,5 +208,21 @@ export class BdService {
       });
   }
   
+  async getMinijuegosCompletados(minijuego: string): Promise<Object> {
+    const jsonData = await this.getJsonData();
+    const minijuegosCompletados = jsonData?.minijuegosCompletados || {};
+  
+    switch (minijuego) {
+      case 'palabra':
+        return minijuegosCompletados.contPalabra;
+      case 'fotoGraciosa':
+        return minijuegosCompletados.contFotoGraciosa;
+      case 'adivinar':
+        return minijuegosCompletados.contAdivinar;
+      default:
+        // Handle the default case
+        return {};
+    }
+  }
   
 }

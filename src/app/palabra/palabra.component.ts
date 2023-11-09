@@ -205,7 +205,7 @@ export class PalabraComponent implements OnInit, AfterViewInit {
   storeSuccess(success: boolean): void {
     localStorage.setItem('success', success.toString());
     
-    this.bdService.setMinijuegoCompletado('palabra', success);
+    this.bdService.setMinijuegoCompletado('palabra');
   }
   
   getGameOver(): boolean | null {

@@ -303,15 +303,41 @@ export class AdivinarDiaComponent implements OnInit {
 
   respuestaSeleccionada: string = ''; // Agregamos el inicializador aquí
   pistasCompradas: number = 0; 
-
-
+  contPalabras: number = 0;
+  
+  getStoredWordDate(): string | null {
+    return localStorage.getItem('currentWordDate');
+  }
+  storeWordDate(date: string): void {
+    localStorage.setItem('currentWordDate', date);
+  }
+  storedDate: any;
+  
   ngOnInit() {
-  //TODO calcular con contador
-    this.preguntaIndex = Math.floor(Math.random() * this.preguntas.length);
-    this.preguntaIndex = this.preguntas.length - 1;
-    console.log(this.preguntaIndex)
+  
+    this.storedDate = this.getStoredWordDate();
     
-    this.preguntaActual = this.preguntas[this.preguntaIndex];
+    
+    if (this.storedDate !== new Date().toLocaleDateString()) {
+      
+      this.bdService.setMinijuegoCompletado('adivinar');
+      this.storeWordDate(new Date().toLocaleDateString());
+      
+    }
+    
+    this.bdService.getMinijuegosCompletados("adivinar").then((minijuegosCompletados) => {
+      this.contPalabras =  minijuegosCompletados as number;
+      if (this.storedDate !== new Date().toLocaleDateString()) {
+        this.contPalabras++;
+      }
+      this.preguntaIndex = this.contPalabras;
+      this.preguntaActual = this.preguntas[this.preguntaIndex];
+      console.log(this.preguntaIndex)
+    })
+    // this.preguntaIndex = Math.floor(Math.random() * this.preguntas.length);
+    // this.preguntaIndex = this.preguntas.length - 1;
+    
+    
     this.soundService.playBackground('quiz');
     
   }
@@ -319,6 +345,7 @@ export class AdivinarDiaComponent implements OnInit {
   comprarPista(){
   //TODO hacer que gaste dinero
     if (this.pistasCompradas < this.preguntaActual.fotos - 1) {
+      this.bdService.decrementarPuntos(5);
       this.bip.play();
       this.pistasCompradas++;
       this.imagenActual = (this.pistasCompradas) ;
@@ -337,13 +364,14 @@ export class AdivinarDiaComponent implements OnInit {
     this.pistasCompradas = this.preguntaActual.fotos;
     
     if (this.respuestaSeleccionada !== '') {
+      this.storeWordDate(new Date().toLocaleDateString());
       this.aciertoSound.play();
       this.mostrarRespuesta = true;
     } else {
       this.cantBuy.play();
     }
     
-    if(this.esRespuestaCorrecta()){
+    if(this.esRespuestaCorrecta() && this.storedDate !== new Date().toLocaleDateString()) {
       this.sumarPuntos(20)
     }
   }
@@ -400,8 +428,7 @@ export class AdivinarDiaComponent implements OnInit {
     }
     
     preguntaSiguiente(){
-    //TODO que no supere el dia actual
-      if(this.preguntaIndex < 22){
+      if(this.preguntaIndex < this.contPalabras){
         this.bip.play();
         this.preguntaIndex++;
         this.preguntaActual = this.preguntas[this.preguntaIndex];
